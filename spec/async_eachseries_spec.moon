@@ -5,20 +5,22 @@ describe "moonscript tests", ->
 
   async_lua = nil
 
+  FIXTURE01 = nil
+
   setup ->
     async_lua = require "lib.async"
+    FIXTURE01 = {"first", "second", "third", "fourth", "fifth"}
+    return
 
   it "async.eachSeries", ->
     async!
-
-    arr = {"first", "second", "third", "fourth", "fifth"}
 
     processor = (item, next)->
       print "[processor] item:#{item}"
       next!
       return
 
-    async_lua.eachSeries arr, processor, (err)->
+    async_lua.eachSeries FIXTURE01, processor, (err)->
       assert.are.equal err, nil
       done!
       return
@@ -26,8 +28,6 @@ describe "moonscript tests", ->
 
   it "async.eachSeries should stop chain when error happen", ->
     async!
-
-    arr = {"first", "second", "third", "fourth", "fifth"}
 
     processor = (item, next)->
       unless item == "third"
@@ -38,7 +38,9 @@ describe "moonscript tests", ->
         next("should not go any further!")
       return
 
-    async_lua.eachSeries arr, processor, (err)->
+    async_lua.eachSeries FIXTURE01, processor, (err)->
+      print "[async_eachseries_spec::test 02] err:#{err}"
+
       assert.are.equal err, "should not go any further!"
       done!
       return
