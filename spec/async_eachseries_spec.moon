@@ -46,5 +46,20 @@ describe "moonscript tests", ->
       return
 
 
+  it "async.mapSeries", ->
+    async!
+
+    processor = (item, next)->
+      print "[processor] item:#{item}"
+      next nil, item
+      return
+
+    async_lua.mapSeries FIXTURE01, processor, (err, results)->
+      assert.are.equal err, nil
+      assert.are.same FIXTURE01, results
+      done!
+      return
+
+
 
 
