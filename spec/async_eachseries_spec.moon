@@ -8,10 +8,18 @@ describe "moonscript tests", ->
   setup ->
     async_lua = require "lib.async"
 
-  it "runs", ->
-    assert.are.equal true, true
+  it "async.eachSeries", ->
+    async!
 
-  it "fails", ->
-    assert.error(-> assert.are.equal false, true)
+    arr = {"first", "second", "third", "fourth", "fifth"}
+
+    processor = (item, next)->
+      print "[processor] item:#{item}"
+      next!
+
+    async_lua.eachSeries arr, processor, (err)->
+      assert.are.equal err, nil
+      done!
+
 
 
